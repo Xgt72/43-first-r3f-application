@@ -2,7 +2,7 @@ import "./index.css";
 import ReactDOM from "react-dom/client";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import Experience from "./Experience";
+import ExperienceWithStage from "./ExperienceWithStage";
 
 const cameraSettings = {
   fov: 45,
@@ -23,7 +23,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <Canvas
     camera={cameraSettings}
     // onCreated={created}
+    shadows={true}
   >
-    <Experience />
+    <ExperienceWithStage />
   </Canvas>
 );
