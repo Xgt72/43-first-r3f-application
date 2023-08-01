@@ -1,40 +1,40 @@
-import { useRef } from "react";
 import { OrbitControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 import { Perf } from "r3f-perf";
+import { Suspense } from "react";
+import PlaceHolder from "./components/PlaceHolder";
+// import FlightHelmetModel from "./components/FlightHelmetModel";
+// import HamburgerModel from "./components/HamburgerModel";
+import HamburgerModelComponent from "./components/HamburgerModelComponent";
+import FoxModel from "./components/FoxModel";
 
 export default function Experience() {
-  const cubeRef = useRef();
-
-  useFrame((state, delta) => {
-    cubeRef.current.rotation.y += delta * 0.2;
-  });
-
   return (
     <>
       <Perf position="top-left" />
       <OrbitControls makeDefault />
-      <directionalLight position={[1, 2, 3]} intensity={1.5} />
+      <directionalLight
+        castShadow
+        position={[1, 2, 3]}
+        intensity={1.5}
+        shadow-normalBias={0.04}
+      />
       <ambientLight intensity={0.5} />
 
       <mesh
-        ref={cubeRef}
-        position-x={2}
-        rotation-y={Math.PI * 0.25}
-        scale={1.5}
+        receiveShadow
+        rotation-x={-Math.PI * 0.5}
+        position-y={-1}
+        scale={10}
       >
-        <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
-      </mesh>
-      <mesh position-x={-2}>
-        <sphereGeometry />
-        <meshStandardMaterial color="orange" />
-      </mesh>
-
-      <mesh rotation-x={-Math.PI * 0.5} position-y={-1} scale={10}>
         <planeGeometry />
         <meshStandardMaterial color="greenyellow" />
       </mesh>
+      <Suspense fallback={<PlaceHolder position-y={0.5} scale={[2, 3, 2]} />}>
+        {/* <FlightHelmetModel /> */}
+        {/* <HamburgerModel /> */}
+        <HamburgerModelComponent scale={0.35} />
+        <FoxModel />
+      </Suspense>
     </>
   );
 }

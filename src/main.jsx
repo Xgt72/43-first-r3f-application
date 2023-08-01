@@ -12,7 +12,7 @@ const cameraSettings = {
 };
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Canvas camera={cameraSettings}>
+  <Canvas shadows camera={cameraSettings}>
     <Experience />
   </Canvas>
 );
