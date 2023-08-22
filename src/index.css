@@ -6,5 +6,6 @@ body,
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: "ivory";
+  overflow: hidden;
+  background-color: ivory;
 }

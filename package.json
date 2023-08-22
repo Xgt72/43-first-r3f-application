@@ -1,5 +1,5 @@
 {
-  "name": "43-first-r3f-application",
+  "name": "three-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,18 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-three/drei": "^9.80.0",
-    "@react-three/fiber": "^8.13.5",
-    "leva": "^0.9.35",
+    "@react-three/drei": "^9.80.4",
+    "@react-three/fiber": "^8.13.7",
+    "@react-three/rapier": "^1.1.1",
     "r3f-perf": "^7.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.154.0"
+    "three": "^0.155.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
-    "@types/three": "^0.154.0",
     "@vitejs/plugin-react": "^4.0.3",
     "eslint": "^8.45.0",
     "eslint-plugin-react": "^7.32.2",
