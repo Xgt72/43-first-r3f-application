@@ -1,5 +1,3 @@
-import { RigidBody } from "@react-three/rapier";
-
 export default function StartBlock({
   geometry,
   material,
