@@ -4,6 +4,7 @@ import "./index.css";
 import { Canvas } from "@react-three/fiber";
 import Experience from "./Experience";
 import { KeyboardControls } from "@react-three/drei";
+import Interface from "./components/Interface";
 
 const cameraSettings = {
   fov: 45,
@@ -25,5 +26,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Canvas shadows camera={cameraSettings}>
       <Experience />
     </Canvas>
+    <Interface />
   </KeyboardControls>
 );
