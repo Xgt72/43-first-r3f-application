@@ -120,14 +120,16 @@ export function MovingWallBlock({ position = [0, 0, 0] }) {
   const obstacleRef = useRef();
 
   useFrame((state) => {
-    const time = state.clock.getElapsedTime() + timeOffset;
-    const x = (Math.sin(time) * (4 - 1.5)) / 2;
+    if (obstacleRef.current) {
+      const time = state.clock.getElapsedTime() + timeOffset;
+      const x = (Math.sin(time) * (4 - 1.5)) / 2;
 
-    obstacleRef.current.setNextKinematicTranslation({
-      x,
-      y: position[1] + 1.5 / 2,
-      z: position[2],
-    });
+      obstacleRef.current.setNextKinematicTranslation({
+        x,
+        y: position[1] + 1.5 / 2,
+        z: position[2],
+      });
+    }
   });
 
   return (

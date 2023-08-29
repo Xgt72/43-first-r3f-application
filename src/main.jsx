@@ -3,6 +3,7 @@ import "./index.css";
 
 import { Canvas } from "@react-three/fiber";
 import Experience from "./Experience";
+import { KeyboardControls } from "@react-three/drei";
 
 const cameraSettings = {
   fov: 45,
@@ -12,7 +13,17 @@ const cameraSettings = {
 };
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Canvas shadows camera={cameraSettings}>
-    <Experience />
-  </Canvas>
+  <KeyboardControls
+    map={[
+      { name: "forward", keys: ["ArrowUp", "KeyW"] },
+      { name: "backward", keys: ["ArrowDown", "KeyS"] },
+      { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
+      { name: "rightward", keys: ["ArrowRight", "KeyD"] },
+      { name: "jump", keys: ["Space"] },
+    ]}
+  >
+    <Canvas shadows camera={cameraSettings}>
+      <Experience />
+    </Canvas>
+  </KeyboardControls>
 );
