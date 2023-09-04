@@ -4,10 +4,17 @@ import { useKeyboardControls } from "@react-three/drei";
 import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
+import useGame from "../stores/useGame";
+
 export default function Player() {
   const bodyRef = useRef();
   const [subscribeKeys, getKeys] = useKeyboardControls();
   const { rapier, world } = useRapier();
+
+  const start = useGame((state) => state.start);
+  const end = useGame((state) => state.end);
+  const restart = useGame((state) => state.restart);
+  const blocksCount = useGame((state) => state.blocksCount);
 
   const jump = () => {
     const origin = bodyRef.current.translation();
@@ -21,7 +28,22 @@ export default function Player() {
     }
   };
 
+  const reset = () => {
+    bodyRef.current.setTranslation({ x: 0, y: 1, z: 0 });
+    bodyRef.current.setLinvel({ x: 0, y: 0, z: 0 });
+    bodyRef.current.setAngvel({ x: 0, y: 0, z: 0 });
+  };
+
   useEffect(() => {
+    const unsubscribeReset = useGame.subscribe(
+      (state) => state.phase,
+      (value) => {
+        if (value === "ready") {
+          reset();
+        }
+      }
+    );
+
     const unsubscribeJump = subscribeKeys(
       (state) => state.jump,
       (value) => {
@@ -32,8 +54,14 @@ export default function Player() {
       }
     );
 
+    const unsubscribeAny = subscribeKeys(() => {
+      start();
+    });
+
     return () => {
+      unsubscribeReset();
       unsubscribeJump();
+      unsubscribeAny();
     };
   }, []);
 
@@ -74,26 +102,37 @@ export default function Player() {
     if (bodyRef.current) {
       bodyRef.current.applyImpulse(impulse, true);
       bodyRef.current.applyTorqueImpulse(torque, true);
+
+      /**
+       * Camera
+       */
+      const bodyPosition = bodyRef.current.translation();
+      const cameraPosition = new THREE.Vector3();
+      cameraPosition.copy(bodyPosition);
+      cameraPosition.z += 2.25;
+      cameraPosition.y += 0.65;
+
+      const cameraTarget = new THREE.Vector3();
+      cameraTarget.copy(bodyPosition);
+      cameraTarget.y += 0.25;
+
+      smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
+      smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
+
+      state.camera.position.copy(smoothedCameraPosition);
+      state.camera.lookAt(smoothedCameraTarget);
+
+      /**
+       * Phases
+       */
+      if (bodyPosition.z < -(blocksCount * 4 + 2)) {
+        end();
+      }
+
+      if (bodyPosition.y < -4) {
+        restart();
+      }
     }
-
-    /**
-     * Camera
-     */
-    const bodyPosition = bodyRef.current.translation();
-    const cameraPosition = new THREE.Vector3();
-    cameraPosition.copy(bodyPosition);
-    cameraPosition.z += 2.25;
-    cameraPosition.y += 0.65;
-
-    const cameraTarget = new THREE.Vector3();
-    cameraTarget.copy(bodyPosition);
-    cameraTarget.y += 0.25;
-
-    smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
-    smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
-
-    state.camera.position.copy(smoothedCameraPosition);
-    state.camera.lookAt(smoothedCameraTarget);
   });
 
   return (
